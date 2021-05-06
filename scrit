@@ -1,0 +1,91 @@
+<script>
+        function validate() {
+            let addBtn = document.getElementById("myInput").value;
+            console.log(addBtn);
+            if (addBtn === '' || addBtn == null) {
+                alert('Заполните описание задачи');
+                return false;
+            }
+            return true;
+        }
+
+        function addRow() {
+            if (validate() == false) {
+                return false;
+            };
+            let name = document.getElementById("myInput").value;
+            // let gender = document.querySelector('input[name="exampleRadios"]:checked').value;
+            let tableRef = document.getElementById('table');
+
+            let check = '<td><input type="checkbox" class = "check" name = "check" value = "off" id="checkbox"/>    &nbsp;   </td>';
+            let newRow = tableRef.insertRow(tableRef.rows.length);
+            let newCellNumber = newRow.insertCell(0);
+            let newCellGender = newRow.insertCell(1);
+            let newCellDone = newRow.insertCell(2);
+            let number = document.createTextNode(tableRef.rows.length - 1);
+            newCellNumber.appendChild(number);
+            newCellGender.appendChild(document.createTextNode(name));
+            //newCellGender.appendChild(document.createTextNode(name));
+            newCellDone.innerHTML = check;
+            //newCellDescr.appendChild((document.createTextNode(description)));
+
+        }
+
+
+
+
+        function checkbox() {
+            // let elements = document.getElementsByClassName('check');
+            // let check = document.querySelector('.check');
+            // check.addEventListener('change', function () {
+            //     if (this.checked) {
+            //         console.log("Чек")
+            //     } else console.log('unchecked');
+            // });
+            // $('#checkbox').on('click', function () {
+            //     let checkboxStatus = $(this).prop('checked')
+            //     console.log(checkboxStatus)
+            // });
+            // $('.check').on('change', function () {
+            //     const arrayChecked = [];
+
+            //     $('.check:checked').each(function () {
+            //         if ($(this).prop('checked')) {
+            //         }
+            //     });
+
+            //     console.log(arrayChecked);
+            // });
+            table.addEventListener('onclick', function (evt) {
+                if (evt.target.closest('.check')) {
+                    evt.target.closest('tr').hide();
+                }
+            })
+
+        }
+        // function hideOrShow(chkbx) {
+        //     let start = chkbx.checked;
+        //     if (start === true) {
+        //         hide();
+        //     } else {
+        //         show();
+        //     }
+        // }
+        // function hide() {
+        //     for (let i = 0; i < elems.length; i++) {
+        //         if (elems[i].hdn === true) {
+        //             let trId = "tr-" + elems[i].id;
+        //             document.getElementById(trId).style.display = "none";
+        //         }
+        //     }
+        // }
+
+        // function show() {
+        //     for (let i = 0; i < elems.length; i++) {
+        //         if (elems[i].hdn === true) {
+        //             let trId = "tr-" + elems[i].id;
+        //             document.getElementById(trId).style.display = "table-row";
+        //         }
+        //     }
+        // }
+    </script>
