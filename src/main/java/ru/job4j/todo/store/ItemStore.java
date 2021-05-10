@@ -13,6 +13,7 @@ import ru.job4j.todo.model.Item;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.function.Function;
 
 public class ItemStore implements Store, AutoCloseable {
 
@@ -34,57 +35,59 @@ public class ItemStore implements Store, AutoCloseable {
 
     @Override
     public Item saveItem(Item item) {
-        Session session = sf.openSession();
-        session.beginTransaction();
-        session.save(item);
-        session.getTransaction().commit();
-        session.close();
-        LOG.info("save" + item);
-        return item;
+        return this.tx(session -> {
+            session.save(item);
+            return item;
+        });
+
     }
 
     @Override
     public Collection<Item> findAllTasks() {
-        Session session = sf.openSession();
-        session.beginTransaction();
-        Query query = session.createQuery("FROM Item ");
-        List<Item> list = query.getResultList();
-        session.getTransaction().commit();
-        session.close();
-        LOG.info("Task size" + (list.size()));
-        list.stream().forEach(item -> LOG.info(item.getDesc()));
-        return list;
+        return this.tx(
+                session -> session.createQuery("FROM Item ").list()
+        );
     }
 
     @Override
     public void updateItem(Item item) {
-        Session session = sf.openSession();
-        Transaction transaction = session.beginTransaction();
-        try {
+        this.tx(session -> {
             Item replaceItem = session.get(Item.class, item.getId());
             replaceItem.setDone(item.getDone());
-            session.getTransaction().commit();
-        } catch (Exception e) {
-            session.getTransaction().rollback();
-            throw e;
-        } finally {
-            session.close();
-        }
+            return replaceItem;
+        });
     }
 
 
     @Override
     public Item findById(int id) {
-        Session session = sf.openSession();
-        session.beginTransaction();
-        Item item = session.get(Item.class, id);
-        session.getTransaction().commit();
-        session.close();
-        return item;
+        return this.tx(session -> {
+            Item item = session.get(Item.class, id);
+            return item;
+        });
     }
 
     @Override
     public void close() throws Exception {
         StandardServiceRegistryBuilder.destroy(registry);
+    }
+
+
+    /*
+    wrapper design pattern
+    */
+    private <T> T tx(final Function<Session, T> command) {
+        final Session session = sf.openSession();
+        final Transaction tx = session.beginTransaction();
+        try {
+            T rsl = command.apply(session);
+            tx.commit();
+            return rsl;
+        } catch (final Exception e) {
+            session.getTransaction().rollback();
+            throw e;
+        } finally {
+            session.close();
+        }
     }
 }
