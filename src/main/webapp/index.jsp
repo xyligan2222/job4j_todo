@@ -1,3 +1,5 @@
+<%@ page contentType="text/html; charset=UTF-8" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html lang="en">
 <head>
     <!-- Required meta tags -->
@@ -14,14 +16,44 @@
         crossorigin="anonymous"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <script src="script.js" type="text/javascript"></script>
-    <link rel="stylesheet" type="text/css" href="style.css">
+<%--    <script src="script.js" type="text/javascript"></script>--%>
+<%--    <link rel="stylesheet" type="text/css" href="style.css">--%>
+<%--    <script type="text/javascript">--%>
+<%--        <%@include file="/script.js" char%>--%>
+<%--    </script>--%>
+
+    <style>
+        <%@include file="/style.css"%>
+    </style>
+    <script src="script.js" charset="utf-8"></script>
 
 
     <title>TODO list</title>
 </head>
 
 <body>
+<c:set var="user" scope="session" value="${user}"/>
+<c:if test="${user.name != null}">
+        <a class="nav-link" href="<%=request.getContextPath()%>/exit.do">
+            Текущий пользователь: <c:out value="${user.name}"/> | Выйти</a>
+
+</c:if>
+<c:if test="${user.name == null}">
+
+            <a class="nav-link" href="<%=request.getContextPath()%>/reg.jsp">Регистрация</a>
+            <a class="nav-link" href="<%=request.getContextPath()%>/login.jsp">
+                    Авторизация </a>
+
+                    <%--    <div class="alert alert-primary" role="alert">--%>
+
+<%--                <a class="nav-link" href="<%=request.getContextPath()%>/reg.jsp">Регистрация</a>--%>
+
+<%--                <a class="nav-link" href="<%=request.getContextPath()%>/login.jsp">--%>
+<%--                    Авторизация </a>--%>
+<%--    </div>--%>
+</c:if>
+
+
 <div id="myDIV" class="header mt-5">
     <h2 style="margin:10px">To-Do List</h2>
     <input type="text" id="myInput" name="desc" placeholder="Task...">
@@ -44,6 +76,7 @@
                 <th>Задача</th>
                 <th>Дата</th>
                 <th>Статус</th>
+                <th>Пользователь</th>
             </tr>
             </thead>
             <tbody>

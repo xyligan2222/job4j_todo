@@ -11,10 +11,19 @@
 
   <servlet>
     <servlet-name>TaskServlet</servlet-name>
-    <servlet-class>ru.job4j.todo.monitor.TaskServlet</servlet-class>
+    <servlet-class>ru.job4j.todo.controller.TaskServlet</servlet-class>
   </servlet>
   <servlet-mapping>
     <servlet-name>TaskServlet</servlet-name>
     <url-pattern>/task</url-pattern>
   </servlet-mapping>
+
+  <filter>
+    <filter-name>AuthFilter</filter-name>
+    <filter-class>ru.job4j.todo.filter.AuthFilter</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>AuthFilter</filter-name>
+    <url-pattern>*.do</url-pattern>
+  </filter-mapping>
 </web-app>

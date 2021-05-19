@@ -1,4 +1,4 @@
-package ru.job4j.todo.monitor;
+package ru.job4j.todo.controller;
 
 
 
@@ -6,9 +6,9 @@ import com.google.gson.Gson;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.job4j.todo.model.Item;
+import ru.job4j.todo.model.User;
 import ru.job4j.todo.store.ItemStore;
 
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -23,7 +23,6 @@ import java.util.List;
 
 
 
-//@WebServlet("/task")
 public class TaskServlet extends HttpServlet {
     private static final Logger LOG = LoggerFactory.getLogger(TaskServlet.class.getName());
 
@@ -52,16 +51,19 @@ public class TaskServlet extends HttpServlet {
         String date = localDate.format(formatter);
         Timestamp timestamp = Timestamp.valueOf(localDate);
         LOG.info("Дата: " + date);
+        User user = (User) req.getSession().getAttribute("user");
 
         boolean done = Boolean.parseBoolean((req.getParameter("done")));
-        if (Integer.parseInt(id) != 0) {
-            Item item = new Item(Integer.parseInt(id), descText, done);
+        if (Integer.parseInt(id) != 0 && user != null ) {
+            Item item = new Item(Integer.parseInt(id), descText, done, user);
             ItemStore.instOf().updateItem(item);
             LOG.info("!!!!!!!!!!!!!!!!!!" + done);
             return;
+        } else if (user != null) {
+            LOG.info("Servlet doPost: describe: " + descText);
+            Item itemSave = new Item(Integer.parseInt(id), descText, timestamp, true, user);
+            ItemStore.instOf().saveItem(itemSave);
         }
-        LOG.info("Servlet doPost: describe: " + descText);
-        Item itemSave = new Item(Integer.parseInt(id), descText, timestamp, true);
-        ItemStore.instOf().saveItem(itemSave);
+
     }
 }

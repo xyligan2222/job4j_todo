@@ -27,16 +27,23 @@ function doSend() {
                 url: 'http://localhost:8080/job4j_todo/task',
             }).done(function (data) {
                 let mainCheckbox = $('#showTasks');
+                let currentUser = getCurrentUser();
+                if (currentUser === null) {
+                    return;
+                }
                 mainCheckbox.prop('checked', true);
-
                     let idNum = data[data.length - 1].id;
                     let message = data[data.length - 1].desc;
                     console.log(message);
                     let date = data[data.length - 1].created;
                     let state = data[data.length - 1].done;
+                    let username = data[data.length - 1].user.name;
+                    let userid = data[data.length - 1].user.id;
                     let status;
+                    let el;
                     state ? status = ' в работе' : status = " выполнено";
-                    let el = `<label><input type="checkbox" id="${idNum}"><span>${status}</span></label>`;
+                    userid === currentUser ? el = `<label><input type="checkbox" id="${idNum}"><span>${status}</span></label>`
+                                            :el = `<label><input type="checkbox" disabled id="${idNum}"><span>${status}</span></label>`;
                     $("#table").find('tbody')
                         .append($('<tr>')
                             .append($('<td>')
@@ -45,6 +52,9 @@ function doSend() {
                                 .text(date)
                             ).append($('<td >')
                                 .append($(el)))
+                            .append($('<td>')
+                                .text(username)
+                            )
                         );
                     if (!state) {
                         $(`#${idNum}`).prop('checked', true);
@@ -54,7 +64,9 @@ function doSend() {
                     if (this.id === 'showTasks') {
                         return;
                     }
-                    let id = $(this).get()[0].id;
+                    // let id = $(this).get()[0].id;
+                    let id = $(this).attr("id");
+                    console.log("id " + id);
                     let status = $(this).parent().find('span').html();
                     if ($(this).is(':checked')) {
                         status = " выполнено";
@@ -91,6 +103,23 @@ $(document).ready(function () {
     updatePage();
 });
 
+function getCurrentUser(){
+    let result = null;
+    $.ajax({
+        async: false,
+        type: 'GET',
+        crossdomain: true,
+        url: 'http://localhost:8080/job4j_todo/auth.do',
+    }).done(function (data) {
+        if (data != null) {
+            console.log("data " + data);
+            result = data.id;
+        }
+
+    });
+    return result;
+}
+
 function updatePage() {
     $.ajax({
         type: 'GET',
@@ -98,24 +127,37 @@ function updatePage() {
         url: 'http://localhost:8080/job4j_todo/task',
     }).done(function (data) {
         let mainCheckbox = $('#showTasks');
+        let currentUser = getCurrentUser();
+        if (currentUser === null) {
+            return;
+        }
         mainCheckbox.prop('checked', true);
         for (let i = 0; i < data.length; data[i++]) {
             let idNum = data[i].id;
             let message = data[i].desc;
             console.log(message);
+            console.log("id " + idNum);
             let date = data[i].created;
             let state = data[i].done;
+            let username = data[i].user.name;
+            let userid = data[i].user.id;
             let status;
+            let el;
             state ? status = ' в работе' : status = " выполнено";
-            let el = `<label><input type="checkbox" id="${idNum}"><span>${status}</span></label>`;
+            userid === currentUser ? el = `<label><input type="checkbox" id="${idNum}"><span>${status}</span></label>`
+                                    :  el = `<label><input type="checkbox" disabled id="${idNum}"><span>${status}</span></label>`;
+
             $("#table").find('tbody')
-                .append($('<tr>')
+                .append($('<tr> id = "task-id"')
                     .append($('<td>')
                         .text(message)
                     ).append($('<td>')
                         .text(date)
                     ).append($('<td >')
                         .append($(el)))
+                    .append($('<td>')
+                        .text(username)
+                    )
                 );
             if (!state) {
                 $(`#${idNum}`).prop('checked', true);
@@ -125,7 +167,9 @@ function updatePage() {
             if (this.id === 'showTasks') {
                 return;
             }
-            let id = $(this).get()[0].id;
+            let id = $(this).attr("id");
+            console.log("id2 " + id);
+           // console.log("id3 " + id2);
             let status = $(this).parent().find('span').html();
             if ($(this).is(':checked')) {
                 status = " выполнено";

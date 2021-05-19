@@ -19,8 +19,20 @@ public class Item {
     private Timestamp created;
     @Column (name = "done")
     private Boolean done;
+    @ManyToOne
+    @JoinColumn(name = "id_user")
+    private User user;
 
     public Item() {
+    }
+
+    public Item(Integer id, String desc, Timestamp created, Boolean done, User user) {
+        this.id = id;
+        this.desc = desc;
+        this.created = created;
+        this.done = done;
+        this.user = user;
+
     }
 
     public Item(Integer id, String desc, Timestamp created, Boolean done) {
@@ -28,6 +40,14 @@ public class Item {
         this.desc = desc;
         this.created = created;
         this.done = done;
+    }
+
+    public Item(Integer id, String desc, Boolean done, User user) {
+        this.id = id;
+        this.desc = desc;
+        this.done = done;
+        this.user = user;
+
     }
 
     public Item(String desc, Timestamp created, Boolean done) {

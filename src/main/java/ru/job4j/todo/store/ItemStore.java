@@ -10,9 +10,9 @@ import org.hibernate.query.Query;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.job4j.todo.model.Item;
+import ru.job4j.todo.model.User;
 
 import java.util.Collection;
-import java.util.List;
 import java.util.function.Function;
 
 public class ItemStore implements Store, AutoCloseable {
@@ -65,6 +65,38 @@ public class ItemStore implements Store, AutoCloseable {
             Item item = session.get(Item.class, id);
             return item;
         });
+    }
+
+    @Override
+    public User findUserByEmail(String email) {
+        return this.tx(session -> {
+            try {
+                Query query = session.createQuery("FROM User as u WHERE u.email = :Email");
+                query.setParameter("Email", email);
+                User user = (User) query.getSingleResult();
+                return user;
+            } catch ( Exception exception) {
+                return null;
+            }
+
+        });
+    }
+
+    @Override
+    public User findUserById(int id) {
+        return this.tx(session -> {
+            User user = session.get(User.class, id);
+            return user;
+        });
+    }
+
+    @Override
+    public User saveUser(User user) {
+        return this.tx(session -> {
+            session.save(user);
+            return user;
+        });
+
     }
 
     @Override
