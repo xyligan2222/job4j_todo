@@ -28,3 +28,15 @@ CREATE TABLE mark (
                       id SERIAL PRIMARY KEY,
                       name TEXT NOT NULL
 );
+
+CREATE TABLE authors (
+                       id SERIAL PRIMARY KEY,
+                       name TEXT NOT NULL
+
+);
+
+
+CREATE TABLE books(
+                      id SERIAL PRIMARY KEY,
+                      name TEXT NOT NULL
+);
