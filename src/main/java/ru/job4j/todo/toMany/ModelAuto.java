@@ -11,6 +11,9 @@ public class ModelAuto {
     private int id;
     @Column(name = "name")
     private String name;
+    @ManyToOne()
+    @PrimaryKeyJoinColumn
+    private MarkAuto markAuto;
 
     public ModelAuto() {
     }
@@ -19,6 +22,20 @@ public class ModelAuto {
         ModelAuto modelAuto = new ModelAuto();
         modelAuto.name = name;
         return modelAuto;
+    }
+    public static ModelAuto of (String name, MarkAuto markAuto) {
+        ModelAuto modelAuto = new ModelAuto();
+        modelAuto.name = name;
+        modelAuto.markAuto = markAuto;
+        return modelAuto;
+    }
+
+    public MarkAuto getMarkAuto() {
+        return markAuto;
+    }
+
+    public void setMarkAuto(MarkAuto markAuto) {
+        this.markAuto = markAuto;
     }
 
     public int getId() {

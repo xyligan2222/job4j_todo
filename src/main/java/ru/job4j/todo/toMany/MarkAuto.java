@@ -13,7 +13,8 @@ public class MarkAuto {
     private int id;
     @Column(name = "name")
     private String name;
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "markAuto", cascade = CascadeType.ALL, orphanRemoval = true )
+//    @OneToMany(mappedBy = "MarkAuto")
     private List<ModelAuto> modelAutos = new ArrayList<>();
 
     public MarkAuto(){
@@ -24,6 +25,7 @@ public class MarkAuto {
         auto.name = name;
         return auto;
     }
+
 
     public int getId() {
         return id;
@@ -67,7 +69,6 @@ public class MarkAuto {
         return "\nMarkAuto{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", modelAutos=" + modelAutos +
                 '}';
     }
 

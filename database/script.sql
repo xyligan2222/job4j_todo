@@ -18,15 +18,17 @@ DELETE from users where id > 3;
 DELETE from item where id > 1;
 
 
-CREATE TABLE model (
-                      id SERIAL PRIMARY KEY,
-                      name TEXT NOT NULL
 
-);
 
 CREATE TABLE mark (
                       id SERIAL PRIMARY KEY,
                       name TEXT NOT NULL
+);
+
+CREATE TABLE model (
+                       id SERIAL PRIMARY KEY,
+                       name TEXT NOT NULL
+
 );
 
 CREATE TABLE authors (
