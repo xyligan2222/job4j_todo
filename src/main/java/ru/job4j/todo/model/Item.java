@@ -1,5 +1,7 @@
 package ru.job4j.todo.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -18,7 +20,8 @@ public class Item {
     @Column (name = "description")
     private String desc;
     @Column (name = "created")
-    private Timestamp created;
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date created;
     @Column (name = "done")
     private Boolean done;
     @ManyToOne
@@ -30,7 +33,7 @@ public class Item {
     public Item() {
     }
 
-    public Item(String desc, Timestamp created, Boolean done, User user, List<Category> categories) {
+    public Item(String desc, Date created, Boolean done, User user, List<Category> categories) {
         this.desc = desc;
         this.created = created;
         this.done = done;
@@ -39,7 +42,7 @@ public class Item {
 
     }
 
-    public Item(Integer id, String desc, Timestamp created, Boolean done, User user) {
+    public Item(Integer id, String desc, Date created, Boolean done, User user) {
         this.id = id;
         this.desc = desc;
         this.created = created;
@@ -48,7 +51,7 @@ public class Item {
 
     }
 
-    public Item(Integer id, String desc, Timestamp created, Boolean done) {
+    public Item(Integer id, String desc, Date created, Boolean done) {
         this.id = id;
         this.desc = desc;
         this.created = created;
@@ -63,7 +66,7 @@ public class Item {
 
     }
 
-    public Item(String desc, Timestamp created, Boolean done) {
+    public Item(String desc, Date created, Boolean done) {
         this.desc = desc;
         this.created = created;
         this.done = done;
@@ -75,10 +78,10 @@ public class Item {
         this.done = done;
     }
 
-    public Item(String desc) {
-        this.desc = desc;
-        this.created = new Timestamp(new Date().getTime());
-    }
+//    public Item(String desc) {
+//        this.desc = desc;
+//        this.created = new Timestamp(new Date().getTime());
+//    }
 
     public User getUser() {
         return user;
@@ -112,7 +115,7 @@ public class Item {
         this.desc = desc;
     }
 
-    public Timestamp getCreated() {
+    public Date getCreated() {
         return created;
     }
 
