@@ -36,6 +36,8 @@
 <c:if test="${user.name != null}">
         <a class="nav-link" href="<%=request.getContextPath()%>/exit.do">
             Текущий пользователь: <c:out value="${user.name}"/> | Выйти</a>
+         <a class="nav-link" href="<%=request.getContextPath()%>/category.do">
+        Добавить задачу</a>
 
 </c:if>
 <c:if test="${user.name == null}">
@@ -43,6 +45,8 @@
             <a class="nav-link" href="<%=request.getContextPath()%>/reg.jsp">Регистрация</a>
             <a class="nav-link" href="<%=request.getContextPath()%>/login.jsp">
                     Авторизация </a>
+
+
 
                     <%--    <div class="alert alert-primary" role="alert">--%>
 
@@ -55,13 +59,9 @@
 
 
 <div id="myDIV" class="header mt-5">
-    <h2 style="margin:10px">To-Do List</h2>
-    <input type="text" id="myInput" name="desc" placeholder="Task...">
-    <button type="submit" id="sendTask" class="addBtn"
-            onclick="doSend()">Добавить задачу
-    </button>
 
 </div>
+
     <div class="form-check">
             <input class="form-check-input" type="checkbox" value="" id="showTasks">
             <label class="form-check-label" for="showTasks">
@@ -77,6 +77,7 @@
                 <th>Дата</th>
                 <th>Статус</th>
                 <th>Пользователь</th>
+                <th>Категория</th>
             </tr>
             </thead>
             <tbody>

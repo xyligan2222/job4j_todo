@@ -14,8 +14,15 @@ CREATE TABLE item (
                        id_user int not null references users (id)
 );
 
+CREATE TABLE category (
+                      id SERIAL PRIMARY KEY,
+                      name TEXT NOT NULL
+
+);
+
 DELETE from users where id > 3;
 DELETE from item where id > 1;
+DELETE from item_category where item_category.item_id> 0;
 
 
 
@@ -42,3 +49,8 @@ CREATE TABLE books(
                       id SERIAL PRIMARY KEY,
                       name TEXT NOT NULL
 );
+
+INSERT INTO category (name) values ('Долгосрочные');
+INSERT INTO category (name) values ('Краткосрочные');
+INSERT INTO category (name) values ('Высокая срочность');
+INSERT INTO category (name) values ('Не срочные');

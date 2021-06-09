@@ -2,7 +2,9 @@ package ru.job4j.todo.model;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -22,8 +24,19 @@ public class Item {
     @ManyToOne
     @JoinColumn(name = "id_user")
     private User user;
-
+//    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.EAGER)
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    List<Category> categories = new ArrayList<>();
     public Item() {
+    }
+
+    public Item(String desc, Timestamp created, Boolean done, User user, List<Category> categories) {
+        this.desc = desc;
+        this.created = created;
+        this.done = done;
+        this.user = user;
+        this.categories = categories;
+
     }
 
     public Item(Integer id, String desc, Timestamp created, Boolean done, User user) {
@@ -65,6 +78,22 @@ public class Item {
     public Item(String desc) {
         this.desc = desc;
         this.created = new Timestamp(new Date().getTime());
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public List<Category> getCategories() {
+        return categories;
+    }
+
+    public void setCategories(List<Category> categories) {
+        this.categories = categories;
     }
 
     public Integer getId() {
@@ -124,5 +153,9 @@ public class Item {
                 ", created=" + created +
                 ", done=" + done +
                 '}';
+    }
+
+    public void addCategory(Category category){
+        this.categories.add(category);
     }
 }

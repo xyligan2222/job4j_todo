@@ -3,6 +3,8 @@ package ru.job4j.todo.controller;
 
 
 import com.google.gson.Gson;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.job4j.todo.model.Item;
@@ -19,6 +21,7 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 
@@ -32,6 +35,7 @@ public class TaskServlet extends HttpServlet {
         resp.setCharacterEncoding("UTF-8");
         LOG.debug("in doGet ");
         List<Item> list = new ArrayList<Item>(ItemStore.instOf().findAllTasks());
+        list.stream().forEach(item -> LOG.info(item.getCategories() + item.getDesc()));
         String json = new Gson().toJson(list);
         LOG.info("Method doGet");
         PrintWriter out = new PrintWriter(resp.getOutputStream(), true, StandardCharsets.UTF_8);
@@ -45,6 +49,7 @@ public class TaskServlet extends HttpServlet {
         String descText = req.getParameter("desc");
         LOG.info("id = " + req.getParameter("id"));
         String id = req.getParameter("id");
+        LOG.info("category = " + (req.getParameter("category")));
         LOG.info("done = " + req.getParameter("done"));
         LocalDateTime localDate = LocalDateTime.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
@@ -61,8 +66,10 @@ public class TaskServlet extends HttpServlet {
             return;
         } else if (user != null) {
             LOG.info("Servlet doPost: describe: " + descText);
+            String[] categories = req.getParameter("category").split(",");
+            LOG.info("categorysd = " + categories);
             Item itemSave = new Item(Integer.parseInt(id), descText, timestamp, true, user);
-            ItemStore.instOf().saveItem(itemSave);
+            ItemStore.instOf().saveItem(itemSave,categories);
         }
 
     }

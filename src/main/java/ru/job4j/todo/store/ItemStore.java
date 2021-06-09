@@ -9,10 +9,12 @@ import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.query.Query;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ru.job4j.todo.model.Category;
 import ru.job4j.todo.model.Item;
 import ru.job4j.todo.model.User;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.function.Function;
 
 public class ItemStore implements Store, AutoCloseable {
@@ -34,8 +36,12 @@ public class ItemStore implements Store, AutoCloseable {
             .buildMetadata().buildSessionFactory();
 
     @Override
-    public Item saveItem(Item item) {
+    public Item saveItem(Item item, String[] categories) {
         return this.tx(session -> {
+            for (String id : categories) {
+                Category category = session.find(Category.class, Integer.parseInt(id));
+                item.addCategory(category);
+            }
             session.save(item);
             return item;
         });
@@ -45,7 +51,7 @@ public class ItemStore implements Store, AutoCloseable {
     @Override
     public Collection<Item> findAllTasks() {
         return this.tx(
-                session -> session.createQuery("FROM Item ").list()
+                session -> session.createQuery("select distinct c from Item c join fetch c.categories ").list()
         );
     }
 
@@ -56,6 +62,16 @@ public class ItemStore implements Store, AutoCloseable {
             replaceItem.setDone(item.getDone());
             return replaceItem;
         });
+    }
+
+    @Override
+    public List<Category> allCategories() {
+        return this.tx(
+                session -> {
+                    List<Category> result = session.createQuery("FroM Category ").list();
+                    return result;
+                }
+        );
     }
 
 
