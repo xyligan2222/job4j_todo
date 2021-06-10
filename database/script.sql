@@ -54,3 +54,10 @@ INSERT INTO category (name) values ('Долгосрочные');
 INSERT INTO category (name) values ('Краткосрочные');
 INSERT INTO category (name) values ('Высокая срочность');
 INSERT INTO category (name) values ('Не срочные');
+
+CREATE TABLE candidate (
+                          id SERIAL PRIMARY KEY,
+                          name TEXT NOT NULL,
+                          experience int NOT NULL,
+                          salary float NOT NULL
+);
