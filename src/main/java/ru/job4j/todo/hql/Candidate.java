@@ -16,7 +16,18 @@ public class Candidate {
     @Column(name = "salary")
     private Long salary;
 
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "baseOfVacancy")
+    private BaseVacancy baseVacancy;
+
     public Candidate() {
+    }
+
+    public Candidate(String name, Integer experience, Long salary, BaseVacancy baseVacancy) {
+        this.name = name;
+        this.experience = experience;
+        this.salary = salary;
+        this.baseVacancy = baseVacancy;
     }
 
     public Candidate(Integer id, String name, Integer experience, Long salary) {
@@ -72,7 +83,8 @@ public class Candidate {
         return Objects.equals(id, candidate.id)
                 && Objects.equals(name, candidate.name)
                 && Objects.equals(experience, candidate.experience)
-                && Objects.equals(salary, candidate.salary);
+                && Objects.equals(salary, candidate.salary)
+                && Objects.equals(baseVacancy, candidate.baseVacancy);
     }
 
     @Override

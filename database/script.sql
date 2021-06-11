@@ -22,6 +22,10 @@ CREATE TABLE category (
 
 DELETE from users where id > 3;
 DELETE from item where id > 1;
+DELETE from baseOfVacancy where id > 0;
+DELETE from vacancy where id > 0;
+
+DELETE from candidate where id > 0;
 DELETE from item_category where item_category.item_id> 0;
 
 
@@ -60,4 +64,16 @@ CREATE TABLE candidate (
                           name TEXT NOT NULL,
                           experience int NOT NULL,
                           salary float NOT NULL
+);
+
+CREATE TABLE vacancy (
+                           id SERIAL PRIMARY KEY,
+                           name TEXT NOT NULL
+
+);
+
+CREATE TABLE baseOfVacancy (
+                         id SERIAL PRIMARY KEY,
+                         name TEXT NOT NULL
+
 );
